@@ -57,11 +57,11 @@ fn main() {
         }
     }
 
-    let (position, depth) = part1_sub.report();
+    let (depth, position) = part1_sub.report();
     println!("Submarine 1 is at pos {} and depth  {}", position, depth);
     println!("Part 1 problem answer: {}", position * depth);
 
-    let (position, depth) = part2_sub.report();
+    let (depth, position) = part2_sub.report();
     println!("Submarine 2 is at pos {} and depth  {}", position, depth);
     println!("Part 2 problem answer: {}", position * depth);
 }
