@@ -1,32 +1,33 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
-fn main() {
-    let filename = "numbers.txt";
-    let file = File::open(filename).expect("File cannot be opened");
-    let lines = BufReader::new(file).lines();
-
-    let numbers: Vec<i32> = lines
-        .map(|line| {
-            line.unwrap()
-                .trim()
-                .parse()
-                .expect("Could not parse number")
-        })
-        .collect();
-
+fn count_increasing<T>(series: &[T]) -> u32
+where
+    T: PartialOrd,
+{
     let mut counter = 0;
-    let mut prev_sum: Option<i32> = None;
+    let mut prev_val: Option<&T> = None;
 
-    for slice in numbers.windows(3) {
-        let sum = slice.iter().sum();
-
-        if matches!(prev_sum, Some(prev) if sum > prev) {
-            counter += 1;
+    for value in series {
+        if matches!(prev_val, Some(v) if value > v) {
+            counter += 1
         }
 
-        prev_sum = Some(sum);
+        prev_val = Some(value);
     }
 
-    println!("The number of increased value is {}", counter);
+    counter
+}
+
+fn main() {
+    let lines = include_str!("../numbers.txt").lines();
+    let numbers: Vec<i32> = lines.map(|l| l.parse().unwrap()).collect();
+
+    let part1_counter = count_increasing(&numbers);
+
+    let windows: Vec<i32> = numbers
+        .windows(3)
+        .map(|w| w.iter().sum())
+        .collect();
+    let part2_counter = count_increasing(&windows);
+
+    println!("Part 1: The number of increasing values is {}", part1_counter);
+    println!("Part 2: The number of increasing values is {}", part2_counter);
 }
